@@ -72,4 +72,6 @@ Hot reload saja tidak cukup ketika:
 - Tools: Claude (Anthropic)
 - Saya menggunakan Claude meminta penjelasan langkah pengerjaan Tugas 7 dan konsep Flutter. Saya melampirkan soal tugas untuk meminta penjelasan step by step beserta alasannya, bukan hanya kode jadi. Dari output tersebut saya memahami penjelasan dan mengetik kode sendiri, memilih ikon dan warna, dan menguji aplikasi di emulator. AI tidak bisa menjalankan flutter analyze atau run program untuk cek hasil, jadi hasilnya saya cek sendiri melalui chrome.
 - Link Prompting: https://claude.ai/share/d5792607-e992-4256-8a69-3f7f3555298d
- 
+
+### Tugas 8
+1. Jelaskan perbedaan antara Navigator.push(), Navigator.pushReplacement(), dan Navigator.pop(). Metode apa yang digunakan untuk membuka formulir dari kartu aksi? Jelaskan juga bagaimana opsi Home di drawer membawa pengguna kembali ke halaman utama.
