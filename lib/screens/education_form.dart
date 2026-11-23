@@ -24,6 +24,11 @@ class _EducationFormPageState extends State<EducationFormPage> {
   final _endDateController = TextEditingController();
   DateTime? _endDate;
   bool _isOngoing = false;
+  
+  String _gpa = "";
+  String _description = "";
+
+  static const int _maxDescriptionLength = 300;
 
   @override
   void dispose() {
@@ -44,6 +49,22 @@ class _EducationFormPageState extends State<EducationFormPage> {
         borderRadius: BorderRadius.circular(5.0),
       ),
     );
+  }
+
+
+  /// Validator IPK: opsional, tapi jika diisi harus angka 0.00 - 4.00.
+  String? _validateGpa(String? value) {
+    // Boleh kosong karena IPK opsional (misalnya untuk jenjang SMA).
+    if (value == null || value.trim().isEmpty) return null;
+    // Terima koma (3,75) maupun titik (3.75).
+    final gpa = double.tryParse(value.trim().replaceAll(',', '.'));
+    if (gpa == null) {
+      return "IPK harus berupa angka, misalnya 3.75";
+    }
+    if (gpa < 0 || gpa > 4) {
+      return "IPK harus di antara 0.00 dan 4.00!";
+    }
+    return null;
   }
 
   String? _validateRequiredText(String? value, String fieldName) {
@@ -84,6 +105,45 @@ class _EducationFormPageState extends State<EducationFormPage> {
         _endDateController.text = _formatDate(picked);
       }
     });
+  }
+
+  /// Menampilkan ringkasan isian setelah semua input lolos validasi.
+  void _showSummaryDialog() {
+    // Jika masih berjalan, tanggal selesai memang kosong.
+    final endText = _isOngoing ? 'Masih berjalan' : _formatDate(_endDate!);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Edukasi berhasil disimpan!'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Institusi: ${_institution.trim()}'),
+                Text('Jenjang: $_degree'),
+                Text('Jurusan: ${_major.trim()}'),
+                Text('Mulai: ${_formatDate(_startDate!)}'),
+                Text('Selesai: $endText'),
+                Text('IPK: ${_gpa.trim().isEmpty ? '-' : _gpa.trim()}'),
+                Text(
+                  'Deskripsi: ${_description.trim().isEmpty ? '-' : _description.trim()}',
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              // Menutup dialog dan kembali ke formulir.
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -221,6 +281,43 @@ class _EducationFormPageState extends State<EducationFormPage> {
                   ),
                 ),
 
+                              // === IPK (opsional) ===
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  decoration: _decoration("IPK (opsional)", hint: "Contoh: 3.75"),
+                  // Keyboard angka dengan titik desimal di HP.
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  textInputAction: TextInputAction.next,
+                  onChanged: (value) => setState(() => _gpa = value),
+                  validator: _validateGpa,
+                ),
+              ),
+
+              // === Deskripsi (opsional) ===
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  maxLines: 4,
+                  maxLength: _maxDescriptionLength,
+                  decoration: _decoration(
+                    "Deskripsi (opsional)",
+                    hint: "Kegiatan, prestasi, atau mata kuliah favorit",
+                  ),
+                  onChanged: (value) => setState(() => _description = value),
+                  validator: (value) {
+                    if (value != null &&
+                        value.trim().length > _maxDescriptionLength) {
+                      return "Deskripsi maksimal $_maxDescriptionLength karakter!";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 8.0),
+
               // === Tombol Simpan ===
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -234,11 +331,9 @@ class _EducationFormPageState extends State<EducationFormPage> {
                   label: const Text("Simpan"),
                   onPressed: () {
                     // validate() menjalankan semua validator di dalam Form.
+                    // Dialog hanya muncul jika semua input valid.
                     if (_formKey.currentState!.validate()) {
-                      // SEMENTARA: nanti diganti AlertDialog di Langkah 8.
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Valid: $_institution")),
-                      );
+                      _showSummaryDialog();
                     }
                   },
                 ),
