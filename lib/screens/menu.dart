@@ -1,21 +1,21 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 import 'package:myportofolio_mobile/widgets/project_card.dart';
- 
+
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
- 
+
   final String npm = "2506605941";
   final String nama = "Lavida Yuthiana Faizah";
   final String kelas = "PBP E";
- 
+
   final List<ItemHomepage> items = [
     ItemHomepage("Lihat Proyek", Icons.folder, Colors.blue),
     ItemHomepage("Tambah Proyek", Icons.add_circle, Colors.green),
     ItemHomepage("Tambah Edukasi", Icons.school, Colors.orange),
     ItemHomepage("Logout", Icons.logout, Colors.red),
   ];
- 
+
   @override
   Widget build(BuildContext context) {
     // Scaffold menyediakan struktur visual dasar halaman (AppBar, Body, SnackBar).
@@ -24,10 +24,7 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'MyPortfolio',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -93,14 +90,14 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
- 
+
 class InfoCard extends StatelessWidget {
   // Kartu informasi yang menampilkan judul (title) dan isi (content).
   final String title;
   final String content;
- 
+
   const InfoCard({super.key, required this.title, required this.content});
- 
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -113,10 +110,7 @@ class InfoCard extends StatelessWidget {
         // Menyusun teks title dan content secara vertikal.
         child: Column(
           children: [
-            Text(
-              title,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+            Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8.0),
             Text(content),
           ],
@@ -125,7 +119,7 @@ class InfoCard extends StatelessWidget {
     );
   }
 }
- 
+
 class ItemHomepage {
   final String name;
   final IconData icon;
@@ -133,4 +127,3 @@ class ItemHomepage {
 
   ItemHomepage(this.name, this.icon, this.color);
 }
- 

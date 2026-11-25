@@ -20,11 +20,11 @@ class _EducationFormPageState extends State<EducationFormPage> {
   // Controller untuk menampilkan teks tanggal di kolom (diisi dari kalender).
   final _startDateController = TextEditingController();
   DateTime? _startDate;
-  
+
   final _endDateController = TextEditingController();
   DateTime? _endDate;
   bool _isOngoing = false;
-  
+
   String _gpa = "";
   String _description = "";
 
@@ -45,12 +45,9 @@ class _EducationFormPageState extends State<EducationFormPage> {
       labelText: label,
       hintText: hint,
       suffixIcon: suffix,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(5.0),
-      ),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
     );
   }
-
 
   /// Validator IPK: opsional, tapi jika diisi harus angka 0.00 - 4.00.
   String? _validateGpa(String? value) {
@@ -190,10 +187,12 @@ class _EducationFormPageState extends State<EducationFormPage> {
                   decoration: _decoration("Jenjang Pendidikan"),
                   initialValue: _degree,
                   items: _degrees
-                      .map((degree) => DropdownMenuItem(
-                            value: degree,
-                            child: Text(degree),
-                          ))
+                      .map(
+                        (degree) => DropdownMenuItem(
+                          value: degree,
+                          child: Text(degree),
+                        ),
+                      )
                       .toList(),
                   onChanged: (value) => setState(() => _degree = value!),
                 ),
@@ -213,7 +212,7 @@ class _EducationFormPageState extends State<EducationFormPage> {
                   validator: (value) => _validateRequiredText(value, "Jurusan"),
                 ),
               ),
-              
+
               // === Tanggal Mulai ===
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -238,7 +237,7 @@ class _EducationFormPageState extends State<EducationFormPage> {
                   },
                 ),
               ),
-              
+
               // === Masih berjalan? ===
               SwitchListTile(
                 title: const Text("Masih berjalan"),
@@ -273,7 +272,8 @@ class _EducationFormPageState extends State<EducationFormPage> {
                         return "Tanggal selesai wajib dipilih (atau aktifkan Masih berjalan)!";
                       }
                       // Validasi urutan tanggal.
-                      if (_startDate != null && !_endDate!.isAfter(_startDate!)) {
+                      if (_startDate != null &&
+                          !_endDate!.isAfter(_startDate!)) {
                         return "Tanggal selesai harus setelah tanggal mulai!";
                       }
                       return null;
@@ -281,14 +281,18 @@ class _EducationFormPageState extends State<EducationFormPage> {
                   ),
                 ),
 
-                              // === IPK (opsional) ===
+              // === IPK (opsional) ===
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  decoration: _decoration("IPK (opsional)", hint: "Contoh: 3.75"),
+                  decoration: _decoration(
+                    "IPK (opsional)",
+                    hint: "Contoh: 3.75",
+                  ),
                   // Keyboard angka dengan titik desimal di HP.
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   textInputAction: TextInputAction.next,
                   onChanged: (value) => setState(() => _gpa = value),
                   validator: _validateGpa,
